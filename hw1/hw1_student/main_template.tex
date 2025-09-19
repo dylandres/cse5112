@@ -2,9 +2,9 @@
 \usepackage{xcolor}
 
 % STUDENTS: Please fill these out with your information
-\newcommand{\name}{Fill Here}
-\newcommand{\netid}{Fill Here}
-\newcommand{\collaborators}{Fill Here}
+\newcommand{\name}{Dylan Andres}
+\newcommand{\netid}{dra77}
+\newcommand{\collaborators}{}
 % / STUDENT
 
 \newcommand{\hwnum}{1}
@@ -51,7 +51,12 @@ help understanding how matchings work.
 \end{subproblem}
 
 \begin{solution}
-Please answer here.
+To analyze the time-complexity of this algorithm, we start with the outer loop. This iterates for all $n$ hospitals as they are matched one at a time, giving this operation
+$\bigO(n)$ run time. Next, the inner loop defines the proposal of the given hospital to each doctor, of which there are also $n$. In the worst case, all $n$ doctors will be proposed to.
+This gives the inner loop $\bigO(n)$ run time for a current overall time-complexity of $\bigO(n^2)$. Within this loop, there are a series of operations. The first operation is a $pop()$ from the beginning of the list. The time-complexity 
+would depend on the implementation of a Python List, but I will assume that Python implements this in a way to ensure constant, $\bigO(1)$ run time. The Dict presence check, Set $add()$ and Set $remove()$ 
+are all constant $\bigO(1)$ operations on average since they involve hashing. However, the $index()$ operation on a List is definitely a $\bigO(n)$ operation, since it requires a linear scan in the worst case.
+\\This gives the implementation a total run time of $\bigO(n^3)$.
 \end{solution}
 
 \begin{subproblem}

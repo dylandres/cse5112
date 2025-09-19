@@ -1,1 +1,8 @@
 .DS_Store
+main_template.aux
+main_template.fdb_latexmk
+main_template.fls
+main_template.log
+main_template.out
+main_template.synctex.gz
+__pycache__
