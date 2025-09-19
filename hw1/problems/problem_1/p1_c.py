@@ -21,6 +21,9 @@ def stable_matching_1c(file) -> dict:
             h_pref = f.readline().split()
             hospitals_pref.append([int(x) for x in h_pref])
 
+    # doctors to hospitals map
+    pairs = {}
+
     # set of hospitals with no doctor
     doctorless_hospitals = set()
     for i in range(n):
@@ -41,11 +44,6 @@ def stable_matching_1c(file) -> dict:
             rank += 1
         hospital_rankings_for_doctor.append(hospital_ranking_for_this_doc)
 
-    # i = doctor i
-    # arr[i] = hospital that doctor is currently matched to
-    # arr[i] = -1 indicates that the doctor has no match yet
-    doctor_to_hospital_matches = [-1] * n
-
     while len(doctorless_hospitals) > 0:
         doctorless_hospital = doctorless_hospitals.pop()
         best_rank = best_rank_for_hospital[doctorless_hospital]
@@ -54,21 +52,18 @@ def stable_matching_1c(file) -> dict:
         pref_doc = hospitals_pref[doctorless_hospital][best_rank]
 
         # Doctor doesn't have a match, match with this hospital
-        if doctor_to_hospital_matches[pref_doc] == -1:
-            doctor_to_hospital_matches[pref_doc] = doctorless_hospital
+        current = pairs.get(pref_doc, -1)
+        if current == -1:
+            pairs[pref_doc] = doctorless_hospital
         else:
-            # Doctor switches for this hospital since its lower ranking
-            if hospital_rankings_for_doctor[pref_doc][doctorless_hospital] < hospital_rankings_for_doctor[pref_doc][doctor_to_hospital_matches[pref_doc]]:
-                doctorless_hospitals.add(doctor_to_hospital_matches[pref_doc])
-                doctor_to_hospital_matches[pref_doc] = doctorless_hospital
-            # Doctor keeps current hospital
+            # Doctor switches for this hospital since it prefers this new one
+            if hospital_rankings_for_doctor[pref_doc][doctorless_hospital] < hospital_rankings_for_doctor[pref_doc][current]:
+                doctorless_hospitals.add(current)
+                pairs[pref_doc] = doctorless_hospital
             else:
                 doctorless_hospitals.add(doctorless_hospital)
 
         # Update rank in case next doctor needs to be considered
         best_rank_for_hospital[doctorless_hospital] += 1
 
-    pairs = {}
-    for i in range(len(doctor_to_hospital_matches)):
-        pairs[i] = doctor_to_hospital_matches[i]
     return pairs
