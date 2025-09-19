@@ -54,7 +54,7 @@ help understanding how matchings work.
 To analyze the time-complexity of this algorithm, we start with the outer loop. This iterates for all $n$ hospitals as they are matched one at a time, giving this operation
 $\bigO(n)$ run time. Next, the inner loop defines the proposal of the given hospital to each doctor, of which there are also $n$. In the worst case, all $n$ doctors will be proposed to.
 This gives the inner loop $\bigO(n)$ run time for a current overall time-complexity of $\bigO(n^2)$. Within this loop, there are a series of operations. The first operation is a $pop()$ from the beginning of the list. The time-complexity 
-would depend on the implementation of a Python List, but I will assume that Python implements this in a way to ensure constant, $\bigO(1)$ run time. The Dict presence check, Set $add()$ and Set $remove()$ 
+would be $\bigO(n)$ since the following elements have to shift after the removal. The Dict presence check, Set $add()$ and Set $remove()$ 
 are all constant $\bigO(1)$ operations on average since they involve hashing. However, the $index()$ operation on a List is definitely a $\bigO(n)$ operation, since it requires a linear scan in the worst case.
 \\This gives the implementation a total run time of $\bigO(n^3)$.
 \end{solution}
@@ -68,7 +68,28 @@ are all constant $\bigO(1)$ operations on average since they involve hashing. Ho
 \end{subproblem}
 
 \begin{solution}
-Please answer here.
+In my $\bigO(n^2)$ implementation of the G-S algorithm, I kept the two $n$ sized 
+Lists for doctor and hospital preferences. I also kept the Set of hospitals, but used it to contain the set of 
+unmatched hospitals, as opposed to matched hospitals. This is so that I can use it to determine which hospital to 
+process next almost like a queue, which "drives" the top loop of the algorithm. In p1\_b, the set is used to check 
+if the current hospital being processed has already been matched. Lastly, I kept the Dict of doctors to hospitals.
+\\
+As optimization, I added a new data structure. The issue with the p1\_b was that the membership checking with $List.index()$
+to find a doctor's preference was contributing linear time to the inner loop. Instead, we can do extra work before the 
+loop starts to construct an $n$ by $n$ matrix of hospital rankings for each doctor. This allows constant time membership checking 
+when evaluating the preference of a doctor.
+\\
+After adding this, I realized that the primary loop was still $\bigO(n^3)$ since each hospital could propose to each
+doctor $n$ times in the worst case ($\bigO(n^2)$), and the determining the doctor to propose to takes linear time ($pop()$ 
+from the hospital's preference list). To alleviate this, I implemented a data structure that tracks each hospital's preferred ranking, 
+which would start from 0 (lowest ranking). Accessing the $i$th item in this List gives us hospital $i$'s preferred ranking in 
+constant time. When their proposal gets rejected, we simply have to increment their preference ranking, which is also constant 
+time. I keep the heuristic for a doctor's decision (keep or switch) the same as p1\_b, but it uses a matrix instead of a List 
+as mentioned before.
+\\
+$\bigO(n^2)$ work is done upfront to create the data structures, then the main while loop is also $\bigO(n^2)$. 
+The work within the while loop is all done in $\bigO(1)$ constant time.. Overall, the implementation maintains a $\bigO(n^2)$ 
+run time.
 \end{solution}
 
 \begin{subproblem}
