@@ -188,7 +188,18 @@ and briefly describe your implementation strategy. Include your implementation i
   \end{subproblem}
 
 \begin{solution}
-Please answer here.
+This algorithm is \textbf{not correct}\\\\
+Counter-example:\\
+Let interval = $[0,5]$\\
+Let $\mathcal{I} = [[0,3], [1,4], [2,5]]$\\
+$|\mathcal{J}| = 2$\\\\
+This algorithm will start by correctly selecting $[0,3]$ as the first interval, 
+since it hasn't selected an interval that covers $[0,5]$. Next, it will greedily
+select $[1,4]$ because its start time is the next earliest and $[1,5]$ is not yet covered. 
+Lastly, it will select $[2,5]$ since it has the next earliest start time and 
+$[2,5]$ is not yet covered. This completely covers the entire interval $[0,5]$
+for a total of 3 sub-intervals. However, there is actually a set of 2 optimal sub-intervals 
+that covers $[0,5]$, $[[0,3], [2,5]]$.
 \end{solution}
 
   \begin{subproblem}
@@ -203,7 +214,20 @@ Please answer here.
   \end{subproblem}
 
 \begin{solution}
-Please answer here.
+This algorithm is \textbf{not correct}\\\\
+Counter-example:\\
+Let interval = $[0,6]$\\
+Let $\mathcal{I} = [[0,3], [1,5], [3,6]]$\\
+$|\mathcal{J}| = 2$\\\\
+This algorithm will start by correctly selecting $[1,5]$ as the first interval, 
+since it is the longest interval (4). Next, it has the choice between $[0,3]$ and 
+$[3,6]$, which are both of length 3.\\
+If it picks $[0,3]$ as the second interval, it will need an interval to cover $[5,6]$, 
+so it will pick $[3,6]$ for a total of 3 subintervals.\\
+If it picks $[3,6]$ as the second interval, it will need an intevral to cover $[0,1]$, 
+so it will pick $[0,3]$ for a total of 3 subintervals.\\
+In either case, it will choose 3 sub-intervals. However, there is actually a set of 
+2 optimal sub-intervals that covers $[0,6]$, $[[0,3],[3,6]]$.
 \end{solution}
 
   \begin{subproblem}
@@ -215,7 +239,19 @@ Please answer here.
 \end{subproblem}
 
 \begin{solution}
-Please answer here.
+This algorithm is \textbf{correct}\\\\
+In a given step of the algorithm, we want to reduce the total number of sub-intervals, while still having a complete 
+covering of the entire interval. For example, in the set $\mathcal{I} = [[0,1], [1,2], [0,2]]$, all sub-intervals are redundant, so it
+is obvious that we don't have a minimal solution, i.e. the smallest number of sub-intervals needed to cover the interval. 
+In this case, removing any sub-interval like $[0,1]$ reduces the total number of sub-intervals, while still maintaining a correct subset 
+(though not the minimal subset).\\
+To truly give us a minimal solution, we need a heuristic for "which" sub-interval to remove at a given step of the algorithm. If we think about 
+the problem in terms of "choosing" the sub-intervals, we would want to pick intervals that have later finish times, so we can reach the goal 
+of the covering the entire interval. Let's say there are two sub-intervals to pick from that are redundant. We will need to pick one to
+minimize the overall set, so it would be best to pick the one with the later finish time. Picking the earlier time "leaves room" for more 
+sub-intervals to be selected, which is not what we want. Choosing the later finish times is equivalent to removing the earlier finish times for 
+this problem.
+
 \end{solution}
 
 \begin{subproblem}
@@ -229,7 +265,18 @@ Please answer here.
 \end{subproblem}
 
 \begin{solution}
-Please answer here.
+This algorithm is \textbf{not correct}\\\\
+Counter-example:\\
+Let interval = $[0,2]$\\
+Let $\mathcal{I} = [[0,1], [1,2], [0,2]]$\\
+$|\mathcal{J}| = 1$\\\\
+In this set of intervals, there are 3 redundant sub-intervals, and 2 of them have the same finish time, $[1,2]$ and $[0,2]$.\\
+If it removes $[1,2]$, then we are left with $[0,1]$ and $[0,2]$. $[0,2]$ is not redundant because it is required to cover
+$[1,2]$. $[0,1]$ is the only redundant sub-interval, since it is already covered by $[0,2]$. Removing it will result 
+in 1 sub-interval, $[0,2]$, which is correct.\\
+If it removes $[0,2]$, then we are left with $[0,1]$ and $[1,2]$. Neither sub-interval is redundant because both are required 
+to cover all of $[0,2]$. This results in 2 sub-intervals, which is not correct.\\
+This algorithm does not provide the correct solution across all sub-cases.
 \end{solution}
 
 {\bf A note about tie-breaking:}
