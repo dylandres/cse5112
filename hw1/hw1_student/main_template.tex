@@ -122,7 +122,11 @@ Memory: 16 GB
 \end{subproblem}
 
 \begin{solution}
-Please answer here.
+The worst case for the G-S algorithm would involve maximizing the overall number of proposals. This would happen when every hospital experiences the maximum 
+possible number of rejections. For this to occur, all the hospitals would need the same exact doctor preference order. This would result in all $n$ hospitals proposing 
+to the same student, and $n-1$ get rejected. The next $n-1$ unmatched hospitals will go to the same next student, and $n-2$ will get rejected. In each round of proposals, 
+the maximum number of rejections are being experienced. The order of the rejections will vary based on the student preference, but the number of rejections in a given round 
+will always be equal to the number of currently unmatched hospitals minus one.
 \end{solution}
 
 \end{problem}
