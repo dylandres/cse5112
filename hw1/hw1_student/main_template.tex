@@ -1,5 +1,6 @@
 \documentclass{hw_template}
 \usepackage{xcolor}
+\usepackage{graphicx}
 
 % STUDENTS: Please fill these out with your information
 \newcommand{\name}{Dylan Andres}
@@ -73,12 +74,12 @@ Lists for doctor and hospital preferences. I also kept the Set of hospitals, but
 unmatched hospitals, as opposed to matched hospitals. This is so that I can use it to determine which hospital to 
 process next almost like a queue, which "drives" the top loop of the algorithm. In p1\_b, the set is used to check 
 if the current hospital being processed has already been matched. Lastly, I kept the Dict of doctors to hospitals.
-\\
+\\\\
 As optimization, I added a new data structure. The issue with the p1\_b was that the membership checking with $List.index()$
 to find a doctor's preference was contributing linear time to the inner loop. Instead, we can do extra work before the 
 loop starts to construct an $n$ by $n$ matrix of hospital rankings for each doctor. This allows constant time membership checking 
 when evaluating the preference of a doctor.
-\\
+\\\\
 After adding this, I realized that the primary loop was still $\bigO(n^3)$ since each hospital could propose to each
 doctor $n$ times in the worst case ($\bigO(n^2)$), and the determining the doctor to propose to takes linear time ($pop()$ 
 from the hospital's preference list). To alleviate this, I implemented a data structure that tracks each hospital's preferred ranking, 
@@ -86,10 +87,32 @@ which would start from 0 (lowest ranking). Accessing the $i$th item in this List
 constant time. When their proposal gets rejected, we simply have to increment their preference ranking, which is also constant 
 time. I keep the heuristic for a doctor's decision (keep or switch) the same as p1\_b, but it uses a matrix instead of a List 
 as mentioned before.
-\\
+\\\\
 $\bigO(n^2)$ work is done upfront to create the data structures, then the main while loop is also $\bigO(n^2)$. 
 The work within the while loop is all done in $\bigO(1)$ constant time.. Overall, the implementation maintains a $\bigO(n^2)$ 
 run time.
+\newpage
+I ran the both versions of these algorithm of these inputs of $n$:\\
+$n=[1, 10, 50, 100, 500, 1000, 2500, 5000, 10000]$\\
+\begin{figure}[h] % [h] = here, can also use [t], [b], [p], or combinations
+  \centering
+  \includegraphics[width=0.7\linewidth]{../problems/problem_1/p1_times.png}
+  % \caption{Median runtime of stable matching algorithms on log–log scale.}
+  % \label{fig:p1_times_loglog}
+\end{figure}
+\\
+Overall, the $1c$ version clearly outperforms the $1b$ in terms of run time. However, the curves don't have seem to have clear 
+separation. It almost looks like both curves have the same asymptotic bound, with $1b$ having a slightly larger "coefficient". The 
+implementation of $1c$ has better time-complexity with the expense of space, and more run-time dedicated to generating the pre-requisite 
+data structures such as the matrices. It is possible that at low $n$ values, the overhead of the pre-requisite work in the algorithm shadows 
+the benefits of a better asymptotic bound, i.e. a larger $n$ value is needed for the $\bigO(n^2)$ vs $\bigO(n^3)$ separation to be observed.  
+I don't have a true sense of what is considered a large $n$ for the G-S algorithm, but I have a feeling that $n=10000$ is considered small. However, 
+generating a file with a larger $n$ would result in files that take up too much disk space, so I stayed with $10000$.
+\\\\
+OS: MacOS Sequoia 15.6.1\\
+CPU: Apple M1 Pro 8-core\\
+Memory: 16 GB
+\\
 \end{solution}
 
 \begin{subproblem}
