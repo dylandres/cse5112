@@ -92,7 +92,7 @@ $\bigO(n^2)$ work is done upfront to create the data structures, then the main w
 The work within the while loop is all done in $\bigO(1)$ constant time.. Overall, the implementation maintains a $\bigO(n^2)$ 
 run time.
 \newpage
-I ran the both versions of these algorithm of these inputs of $n$:\\
+I ran both versions of these algorithm of these inputs of $n$:\\
 $n=[1, 10, 50, 100, 500, 1000, 2500, 5000, 10000]$\\
 \begin{figure}[h] % [h] = here, can also use [t], [b], [p], or combinations
   \centering
@@ -360,7 +360,7 @@ We provide a \texttt{visualizer.py} script in the \texttt{problem\_3} folder tha
     Design and implement a $\Theta(n ^ 2)$ algorithm that given a sequence of integers $a_1,\ldots,a_n$ and $\delta_{mode}$ as described above, outputs the frequency of $\delta_{mode}$. Include your implementation in \texttt{problem\_4/p4\_a.py}.
   \end{subproblem}
     \begin{solution}
-        My implement is a simple, brute-force method. The top loop iterates through all indices of $values$ which is $\Theta(n)$, and the inner loop does the same in order to 
+        My implementation is a simple, brute-force method. The top loop iterates through all indices of $values$ which is $\Theta(n)$, and the inner loop does the same in order to 
         get all possible pairings of the list where $i != j$, which is also $\Theta(n)$. Next, it calculates the differences between the two values at these indices and increments a 
         global counter if the difference equals the mode, which is constant $\Theta(1)$ work. After both loops complete, the global count is returned. The total work is $\Theta(n ^ 2)$.
     \end{solution}
@@ -370,7 +370,20 @@ We provide a \texttt{visualizer.py} script in the \texttt{problem\_3} folder tha
     Design and implement a $\Theta(n \log n)$ algorithm that given a sequence of integers $a_1,\ldots,a_n$ and $\delta_{mode}$ as described above, outputs the frequency of $\delta_{mode}$. Include your implementation in \texttt{problem\_4/p4\_b.py}.
   \end{subproblem}
     \begin{solution}
-        Please answer here.
+        My implementation involved algebraicly manipulating the inputs to the algorithm. We are given the mode difference, and we want to find the number of times it occurs across all pairwise differences in the sequence. Therefore, there must be
+        a pair $(a,b)$, such that $a - b$ is equal to the mode difference. Equivalently, $a$ minus the mode difference gives us $b$. What we can do for each element in the sequence is perform this subtraction, and find 
+        out how many times $b$ occurs in the sequence. Of the bat, we will definitely need a linear scan for each element, and for each element we will need to perform a search. Binary search can be used, at the expense of an 
+        $\Theta(nlogn)$ sort of the input sequence, which is what I did first. Next, for each element $a$ in the sequence, we can check for the existence of $a - d\_mode$. However, the sequence could have duplicates, so I implemented 
+        a tweaked version of binary search that would give me the "bounds" of the element I need to search for, i.e. the first occurence and the index after its last occurence. For example, binary searching for $2$ in $[1, 2, 2, 3]$ 
+        would yield $1$ and $3$. Binary searching for $99$ would yield $4$ and $4$. Given the bounds of $a - d\_mode$, I can subtract those bounds to give me the number of times that value occurred. For example, there are $1-3=2$ instances 
+        of $2$, and $4-4=0$ instances of $99$. Now that I have a way to find out element frequency in $\Theta(logn)$ time, I can apply this to each of the $n$ elements in the sequence while keeping a global count of the element frequencies.
+        This would be $\Theta(n)$ (linear scan) * $\Theta(logn)$ work (binary search) + $\Theta(nlogn)$ (sort), for a total
+        of $\Theta(nlogn)$. However, this algorithm doesn't account for when $d\_mode$ is zero, since it double counts for duplicate element pairs, i.e. where $i==j$. For this special case, I simply perform a linear scan to find any 
+        consecutive elements, which are contributing to the $d\_mode$ of zero. For example, in $[1, 2, 2, 4, 5, 5, 5]$, there are $2$ consecutive 2s, and $3$ consecutive 5s. I do a similar heuristic as the binary search 
+        to find the bounds of these elements, but with a linear scan instead. For example, I find that $1$ and $3$ are the bounds of $2$. $3-1=2$ gives me the number of occurences of $2$, and I know that 
+        $num\_occurrences * num\_occurrences$ gives me the number of total pairs, which in turn gives the number of pairwise differences made. However, we can't include $i==j$, so we have to do $num\_occurrences * (num\_occurrences - 1)$.
+        My linear scan will do constant work to do this calculation, while keeping a global count of the frequencies, for a total of $\Theta(n)$ time. However, the algorithm is still $\Theta(nlogn)$ from the primary case, $d\_mode != 0$, therefore this 
+        algorithm has total work of $\Theta(nlogn)$.
     \end{solution}
 
   \begin{subproblem}
@@ -378,15 +391,47 @@ We provide a \texttt{visualizer.py} script in the \texttt{problem\_3} folder tha
     Design and implement a $\Theta(n)$ algorithm that given a sequence of integers $a_1,\ldots,a_n$ and $\delta_{mode}$ as described above, outputs the frequency of $\delta_{mode}$. Include your implementation in \texttt{problem\_4/p4\_c.py}.
   \end{subproblem}
     \begin{solution}
-        Please answer here.
+        My implementation relies on the same algebraic manipulation as B along with a linear scan. However, it doesn't require a pre-sort. Instead, it "trades" time in exchange for space. The algorithm 
+        starts by doing extra work to create a frequency table of every element. This requires linear, $\Theta(nlogn)$ work. Next, we revisit the algebraic manipulation: If there is a pair $(a,b)$ such that 
+        $a - b$ is equal to the mode difference, it must be true that $a$ minus the mode difference gives us $b$. Equivalently, $b$ minus the mode difference gives us $a$. Therefore, for a given element $a$ 
+        we find its pair by adding $d\_mode$. For example, if $a=10$ and $d\_mode=2$, then $b=12$. We can check the list for how many times $12$ occurs. However, since we did the extra work to create a frequency table, 
+        we can perform an $\Theta(1)$ lookup to find the frequency of $12$. If it doesn't exist, then there was no pair for $a$ that contributed to the mode difference. If it does, then we can multiply this frequency by 
+        the frequency of $a$ to give us the total number of pairs that contributed to the mode difference. We can perform this algebra and table lookup on each element of the sequence to a global counter, which requires 
+        a linear scan. This would be $\Theta(n)$ (table construction) + ($\Theta(n)$ (linear scan) * $\Theta(nlogn)$ (algebra, data structure access, adding to global count) ), for total work of $\Theta(nlogn)$.
+        However, if the mode difference is zero, this approach will double count for pairs where $i == j$. To account for this, we can simply subtract the total frequencies of each element from our global count. 
+        This requires a linear scan which is $\Theta(n)$, however $\Theta(nlogn)$ still dominates the time-complexity of the entire algorithm.
+
     \end{solution}
 
+    \newpage
   \begin{subproblem}
     (\textit{5 points})
     Provide a comparison of the empirical performance analysis of your algorithms from parts (b) and (c). There is a clear performance advantage of using the algorithm from part (c) over the one from part (b). Is there any trade-off? \textit{\textbf{Hint:} Consider the \href{https://en.wikipedia.org/wiki/Space_complexity}{space complexity} of the algorithms, which is the space an algorithm takes to execute.}
   \end{subproblem}
     \begin{solution}
-        Please answer here.
+      I ran both versions of these algorithm of these inputs of $n$:\\
+      $n=[10, 50, 100, 250, 500, 750, 1000, 2500, 5000, 7500, 10000]$\\
+        \begin{figure}[h] % [h] = here, can also use [t], [b], [p], or combinations
+          \centering
+          \includegraphics[width=0.7\linewidth]{../problems/problem_4/p4_times.png}
+        \end{figure}
+      In the plot, there is clear separation between the runtime of B and C. At small $n$ values (< 1000), the time difference is negligible, but the runtime for B increases at a much 
+      more rapid rate compared to C. The difference shadows C so much that it seems like a straight line, so I plotted C on its own:
+        \begin{figure}[h] % [h] = here, can also use [t], [b], [p], or combinations
+          \centering
+          \includegraphics[width=0.7\linewidth]{../problems/problem_4/p4_times_c_only.png}
+        \end{figure} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+      C clearly has a linear time complexity based on its run time.
+      \newpage
+      I also plotted the peak memory usage of each algorithm:
+        \begin{figure}[h] % [h] = here, can also use [t], [b], [p], or combinations
+          \centering
+          \includegraphics[width=0.7\linewidth]{../problems/problem_4/p4_space.png}
+        \end{figure}
+      The trade off is clear in this graph, as B uses more baseline memory than the C implementation. I would expect C's graph to appear more linear since its space complexity is linear, and it needs to 
+      store the frequency of every element. However, it seems to flatten out at approximately 1000 bytes. The B implementation has constant space complexity, since it does not create any data structures 
+      that scale with size, and it reuses the input sequence during the binary search. There is still some memory usage for B, but this is likely overhead from Python. I also noticed that on smaller inputs 
+      for both implementations ($n$ < 1000), the memory usage is significantly lower. This could be an artifact of some optimization, caching, or something under the hood of Python.
     \end{solution}
 
   

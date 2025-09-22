@@ -487,6 +487,12 @@ class TestProblem4(unittest.TestCase):
         delta_freq = most_frequent_difference_c(input_list, 0)
         self.assertEqual(498148, delta_freq)
 
+    def test_correctness_c_n10000_3(self):
+        """Test #3 n = 10000"""
+        input_list = [1, 2, 2, 4, 5, 5, 5]
+        delta_freq = most_frequent_difference_c(input_list, 0)
+        self.assertEqual(8, delta_freq)
+
 
 if __name__=='__main__':
     unittest.main()
