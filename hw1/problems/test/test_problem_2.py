@@ -112,3 +112,18 @@ class TestProblem2(unittest.TestCase):
         """Test interval cover long #5."""
         cover = interval_covering(1000, [[789, 875], [249, 866], [236, 669], [84, 174], [575, 749], [744, 795], [435, 663], [0, 607], [493, 925], [607, 1000], [539, 576], [240, 587]])
         self.assertEqual(set(tuple(pair) for pair in cover), {(0, 607), (607, 1000)})
+
+    def test_test_1(self):
+        cover = interval_covering(2, [[0, 1], [1, 2], [0, 2]])
+        self.assertEqual(set(tuple(pair) for pair in cover), {(0, 2)})
+
+    def test_test_2(self):
+        cover = interval_covering(2, [[0, 1], [1, 2], [0, 2], [1, 2]])
+        self.assertEqual(set(tuple(pair) for pair in cover), {(0, 2)})
+
+    def test_test_3(self):
+        cover = interval_covering(3, [[0, 1], [1, 2], [0, 2], [1, 3]])
+        self.assertEqual(set(tuple(pair) for pair in cover), {(0, 2), (1, 3)})
+
+if __name__ == '__main__':
+    unittest.main()
