@@ -360,7 +360,9 @@ We provide a \texttt{visualizer.py} script in the \texttt{problem\_3} folder tha
     Design and implement a $\Theta(n ^ 2)$ algorithm that given a sequence of integers $a_1,\ldots,a_n$ and $\delta_{mode}$ as described above, outputs the frequency of $\delta_{mode}$. Include your implementation in \texttt{problem\_4/p4\_a.py}.
   \end{subproblem}
     \begin{solution}
-        Please answer here.
+        My implement is a simple, brute-force method. The top loop iterates through all indices of $values$ which is $\Theta(n)$, and the inner loop does the same in order to 
+        get all possible pairings of the list where $i != j$, which is also $\Theta(n)$. Next, it calculates the differences between the two values at these indices and increments a 
+        global counter if the difference equals the mode, which is constant $\Theta(1)$ work. After both loops complete, the global count is returned. The total work is $\Theta(n ^ 2)$.
     \end{solution}
 
   \begin{subproblem}
