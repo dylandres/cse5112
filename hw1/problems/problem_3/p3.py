@@ -73,5 +73,36 @@ def huffman_compress(all_rle_symbols):
     
     huffman_codes = {}
     encoded_data = ""
-    
+    freqs = collections.Counter(all_rle_symbols)
+    heap = []
+    heapq.heapify(heap)
+    for symbol in freqs.keys():
+        node = Node(symbol=symbol, freq=freqs[symbol])
+        heapq.heappush(heap, node)
+
+    while len(heap) > 1:
+        node_1 = heapq.heappop(heap)
+        node_2 = heapq.heappop(heap)
+        merged_node = Node(symbol=str(node_1.symbol) + "|" + str(node_2.symbol), freq=node_1.freq + node_2.freq, left=node_1, right=node_2)
+        heapq.heappush(heap, merged_node)
+
+    bitstring = ""
+    huffman_codes = {}
+    top_node = heapq.heappop(heap)
+    traverse_tree(top_node, bitstring, huffman_codes)
+
+    encoded_data = ""
+    for symbol in all_rle_symbols:
+        encoded_data += huffman_codes[symbol]
     return huffman_codes, encoded_data
+
+def traverse_tree(node, bitstring, huffman_codes):
+    if node == None:
+        return
+    if node.left == None and node.right == None:
+        if bitstring == "":
+            bitstring = "0"
+        huffman_codes[node.symbol] = bitstring
+        return
+    traverse_tree(node.left, bitstring + "0", huffman_codes)
+    traverse_tree(node.right, bitstring + "1", huffman_codes)
