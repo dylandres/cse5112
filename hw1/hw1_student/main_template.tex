@@ -109,7 +109,8 @@ generating a file with a larger $n$ would result in files that take up too much 
 \\\\
 OS: MacOS Sequoia 15.6.1\\
 CPU: Apple M1 Pro 8-core\\
-Memory: 16 GB
+Memory: 16 GB\\
+**ChatGPT was used to generate example test cases for this problem\\
 \\
 \end{solution}
 
@@ -428,10 +429,16 @@ We provide a \texttt{visualizer.py} script in the \texttt{problem\_3} folder tha
           \centering
           \includegraphics[width=0.7\linewidth]{../problems/problem_4/p4_space.png}
         \end{figure}
-      The trade off is clear in this graph, as B uses more baseline memory than the C implementation. I would expect C's graph to appear more linear since its space complexity is linear, and it needs to 
+      The trade off is clear in this graph, as C uses more baseline memory than the B implementation despite having better time-complexity/run time. I would expect C's graph to appear more linear since its space complexity is linear, and it needs to 
       store the frequency of every element. However, it seems to flatten out at approximately 1000 bytes. The B implementation has constant space complexity, since it does not create any data structures 
-      that scale with size, and it reuses the input sequence during the binary search. There is still some memory usage for B, but this is likely overhead from Python. I also noticed that on smaller inputs 
+      that scale with size, and it reuses the input sequence during the binary search. There is still some memory usage for B, but it is constant and likely just overhead from Python. I also noticed that on smaller inputs 
       for both implementations ($n$ < 1000), the memory usage is significantly lower. This could be an artifact of some optimization, caching, or something under the hood of Python.
+      \\\\
+    OS: MacOS Sequoia 15.6.1\\
+    CPU: Apple M1 Pro 8-core\\
+    Memory: 16 GB\\
+    **ChatGPT was used to generate example test cases for this problem\\
+    \\
     \end{solution}
 
   

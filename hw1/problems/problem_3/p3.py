@@ -34,8 +34,16 @@ def run_length_encode(data_block):
     # If you see a non-zero value, create a symbol with the current zero count
     # and the value, then reset the counter. Don't forget the EOB symbol
     # when you reach the end of the non-zero coefficients.
-    
-    return []
+    num_zeros = 0
+    symbols = []
+    for value in data_block:
+        if value == 0:
+            num_zeros += 1
+        else:
+            symbols.append((num_zeros, value))
+            num_zeros = 0
+    symbols.append(('EOB',))
+    return symbols
 
 
 def huffman_compress(all_rle_symbols):
