@@ -1,0 +1,74 @@
+\documentclass{hw_template}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% STUDENTS: Please fill these out with your information
+\newcommand{\name}{Dylan Andres}
+\newcommand{\netid}{dra77}
+\newcommand{\collaborators}{}
+% / STUDENT
+
+\newcommand{\hwnum}{1}
+\newcommand{\duedate}{September 23, 11:59pm ET}
+\renewcommand{\title}{Stable Matching, Greedy, Divide and Conquer}
+\newcommand{\io}{\textbf{Code input and output format.} }
+\newcommand{\submission}{\textbf{Submission.}}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+
+% \newtheorem{claim}{Claim}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 1: G-S algorithm
+
+\begin{problem}
+In this problem, you will compute the maximum sum of non-adjacent elements,
+$\operatorname{maxsum}(x)
+= \max_{S \in \mathcal{S}} \; \sum_{s \in S} x_s$
+where no two elements in \(S\) are adjacent, in two settings: a list and a tree. The definition of
+“adjacent” will be specific to each setting. Additionally, for each setting you must first state
+the subproblem precisely and then implement the full dynamic programming algorithm.\\
+
+
+(a) (\textit{2 points})
+Given a sequence of integers $x = (x_1, x_2, \ldots, x_n)$,
+your goal is to compute the largest sum of non-adjacent elements of \(x\), denoted as
+\(\operatorname{maxsum\_list}(x)\).
+Adjacent elements of the sequence are next to each other: \(x_i\) and \(x_{i+1}\). \\\\
+Identify the dynamic programming subproblem and write its solution here.\\
+
+\textbf{The DP subproblem is: In order to maximize the sum of non-adjacent integers, should we 
+take the current integer plus the total sum of the integer two places before it? Or should we
+skip the current integer and take the total sum of the integer one place before it?}\\\\
+
+(b) (\textit{2 points})
+Given a tree with nodes that contain integers, your goal is to compute the largest sum
+of non-adjacent elements. Trees are represented as a set of vertices
+$v_i \in V$ and edges $(v_i, v_j) \in E \subseteq V \times V$.
+There are no loops and every vertex has at most a single parent.
+Adjacent elements of the tree are those that have an edge between nodes, i.e. $(v_i, v_j) \in E$.
+For convenience, define the children of a node to be
+$c(v_i) = { v_j \mid (v_i, v_j) \in E }$\\\\
+Identify the dynamic programming subproblem and write its solution here.\\\\
+
+\textbf{placeholder}
+
+\end{problem}
+
+\newpage
+\begin{problem}
+Given $n$ points in a 2D plane, your goal is to find the two points that are closest
+together according to the Euclidean distance
+$d(x, y) = \sqrt{(x_i - y_i)^2 + (x_j - y_j)^2}$.
+
+
+(d) (\textit{5 points})
+Perform an empirical analysis of the three approaches, plotting their runtime
+performance for a series of problem sizes. \\\\
+
+\textbf{placeholder}
+
+\end{problem}
+
+\end{document}
