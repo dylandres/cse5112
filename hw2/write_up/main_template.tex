@@ -40,7 +40,15 @@ Identify the dynamic programming subproblem and write its solution here.\\
 
 \textbf{The DP subproblem is: In order to maximize the sum of non-adjacent integers in a list, should we 
 take the current integer plus the total sum of the integer two places before it? Or should we
-skip the current integer and take the total sum of the integer one place before it?}\\\\
+skip the current integer and take the total sum of the integer one place before it?}\\
+
+\textbf{The solution involves creating a DP array of size n+1 (where n is the length of input list) so 
+that it can be 1-indexed. The base cases are dp[0] = 0 and dp[1] = x[0] (where dp is the DP array and x is the input list).
+This is because an empty list has a max sum of 0 and a list with one element has a max sum of that element.
+Then, for each index i from 2 to n, we compute dp[i] as the maximum of  dp[i-2] + x[i-1] 
+(taking the current integer plus the total sum of the integer two places before it), and dp[i-1] 
+(skipping current element and taking the total sum of the integer one place before it).
+Finally, we return dp[n] as the max sum.}\\\\
 
 (b) (\textit{2 points})
 Given a tree with nodes that contain integers, your goal is to compute the largest sum
@@ -54,7 +62,15 @@ Identify the dynamic programming subproblem and write its solution here.\\\\
 
 \textbf{The DP subproblem is: In order to maximum the sum of non-adjacent nodes in a tree, should we
 take the current node's value plus the total sum of its sub-trees (excluding its direct child nodes) or should we 
-skip the current node's value and take the maximum sum from all of its sub-trees}\\\\
+skip the current node's value and take the maximum sum from all of its sub-trees}\\
+
+\textbf{The solution starts by evaluating two edge cases, a tree of size 0 has a maximum of 0, and a tree of size 1 has
+a maximum of the value of the single node. Next, we find the root of tree to start the heuristic. Since a node can 
+have mulitple children, the tree has to be traversed recursively starting with the root. At each step of the recursive sequence,
+we compute for each child:}\\
+\textbf{1. The sum of taking the current node's value plus the total sum of its sub-trees (excluding its direct child nodes)}\\
+\textbf{2. The sum of skipping the current node's value and taking the maximum sum from all of its sub-trees}\\
+\textbf{These sums are returned up the recursive call stack back to the root. Finally, we return the maximum of the two sums.}\\\\
 
 \end{problem}
 
