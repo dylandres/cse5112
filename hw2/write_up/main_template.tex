@@ -85,7 +85,21 @@ $d(x, y) = \sqrt{(x_i - y_i)^2 + (x_j - y_j)^2}$.
 Perform an empirical analysis of the three approaches, plotting their runtime
 performance for a series of problem sizes. \\\\
 
-\textbf{placeholder}
+\includegraphics[width=0.7\linewidth]{../problem_2/p2_times.png}\\
+\textbf{I ran a benchmark for each implementation on several input sizes as large as 5000, then 
+plotted the median runtime. The resulting graph is very consistent with the asymptotic bounds of each algorithm. 
+The brute-force algorithm (slowest) is clearly $O(n^2)$ as evident by the quadratic curve. The divide \& conquer looks 
+linear at first, but there is a clear "elbow" around n = 2000, which is consistent with the $O(n \log n)$ bound. Lastly,
+the randomized algorithm is the fastest and appears linear, which is consistent with its expected $O(n)$ time complexity. 
+This is not as obvious, so I also plotted the randomized algorithm own its own:}\\
+
+\includegraphics[width=0.7\linewidth]{../problem_2/p2_times_c.png}\\
+
+OS: MacOS Sequoia 15.6.1\\
+CPU: Apple M1 Pro 8-core\\
+Memory: 16 GB\\
+**ChatGPT was used to generate example test cases for this problem\\
+\\
 
 \end{problem}
 
