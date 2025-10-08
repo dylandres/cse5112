@@ -38,7 +38,7 @@ your goal is to compute the largest sum of non-adjacent elements of \(x\), denot
 Adjacent elements of the sequence are next to each other: \(x_i\) and \(x_{i+1}\). \\\\
 Identify the dynamic programming subproblem and write its solution here.\\
 
-\textbf{The DP subproblem is: In order to maximize the sum of non-adjacent integers, should we 
+\textbf{The DP subproblem is: In order to maximize the sum of non-adjacent integers in a list, should we 
 take the current integer plus the total sum of the integer two places before it? Or should we
 skip the current integer and take the total sum of the integer one place before it?}\\\\
 
@@ -52,7 +52,9 @@ For convenience, define the children of a node to be
 $c(v_i) = { v_j \mid (v_i, v_j) \in E }$\\\\
 Identify the dynamic programming subproblem and write its solution here.\\\\
 
-\textbf{placeholder}
+\textbf{The DP subproblem is: In order to maximum the sum of non-adjacent nodes in a tree, should we
+take the current node's value plus the total sum of its sub-trees (excluding its direct child nodes) or should we 
+skip the current node's value and take the maximum sum from all of its sub-trees}\\\\
 
 \end{problem}
 
