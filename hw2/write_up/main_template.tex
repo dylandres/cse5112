@@ -103,4 +103,79 @@ Memory: 16 GB\\
 
 \end{problem}
 
+\newpage
+\begin{problem}
+\textbf{Skip lists} are randomized data structures that allow efficient (in expectation) 
+insertion, search, and deletion operations in a sorted list. We assume that list elements 
+are always integers.
+
+You will implement skip lists in this problem, as well as a linked list baseline. 
+We supply separate \texttt{Node} classes in each file \texttt{problem\_3/*}.py, 
+which will be the backbone of each implementation.
+
+Both implementations will have the following interface:
+\begin{itemize}
+    \item \textbf{insert(list, x: int)} $\rightarrow$ \texttt{None}: Add a new integer to our list.
+    \item \textbf{search(list, x: int)} $\rightarrow$ \texttt{Node}: Return the node in our list that has the value $x$.
+    \item \textbf{delete(list, x: int)} $\rightarrow$ \texttt{None}: Delete the node in our list that has value $x$.
+\end{itemize}
+
+For simplicity, we assume that no repeated elements will be inserted into the list.
+
+Please read the following resource on skip lists for more helpful information.
+
+
+(a) (\textit{5 points})
+As a baseline, implement a linked list class. Give the runtime complexity of 
+search, insertion, and deletion. The linked list must always be in sorted order, and all 
+elements will be integers. Include your implementation in 
+\texttt{problem\_3/p3\_a.py}.\\\\
+\textbf{Search: O(n). The worst case is when the element to search does not exist, or when the element is the largest of all existing elements. All n nodes must be traversed.}\\\\
+\textbf{Insertion: O(n). The worse case is when the element to insert is larger than all existing elements. All n nodes must be traversed.}\\\\
+\textbf{Deletion: O(n). The worst case is when the element to delete does not exist or when the element is the largest of all existing elements. All n nodes must be traversed.}\\\\
+\newpage
+
+(b) (\textit{5 points})
+Implement insertion for skip lists, which should take O(log n) expected time. All
+list elements will be ints. Perform an empirical analysis of insertion in skip lists versus the
+linked list baseline. Include your implementation in 
+\texttt{problem\_3/p3\_a.py}.\\\\
+\includegraphics[width=0.7\linewidth]{../problem_3/insert_per_op.png}\\
+\textbf{I ran a benchmark for both insert implementations on several input sizes as large as 5000. The resulting graph lines up with the 
+expected asymptotic bound of each. LinkedList insertion is O(n), while SkipList insertion is O(logN). To make this more obvious, I plotted SkipList
+on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
+\includegraphics[width=0.7\linewidth]{../problem_3/insert_per_op_skip.png}\\
+
+\newpage
+
+(c) (\textit{5 points})
+Implement search for skip lists, which should take $O(\log n)$ expected time. Give
+the expected and worst-case runtime complexity. All list elements will be integers. Perform
+an \emph{empirical analysis} of search in skip lists versus the linked list baseline. Include your
+implementation in \texttt{problem\_3/p3\_b.py}.\\\\
+\includegraphics[width=0.7\linewidth]{../problem_3/search_per_op.png}\\
+\textbf{I ran a benchmark for both search implementations on several input sizes as large as 5000. The resulting graph lines up with the 
+expected asymptotic bound of each. LinkedList search is O(n), while SkipList search is O(logN). To make this more obvious, I plotted SkipList
+on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
+\includegraphics[width=0.7\linewidth]{../problem_3/search_per_op_skip.png}\\
+\newpage
+
+(d) (\textit{5 points})
+Implement deletion for skip lists, which should take $O(\log n)$ expected time. All
+list elements will be integers. Perform an \emph{empirical analysis} of deletion in skip lists versus the
+linked list baseline. Include your implementation in \texttt{problem\_3/p3\_b.py}.\\\\
+\includegraphics[width=0.7\linewidth]{../problem_3/delete_per_op.png}\\
+\textbf{I ran a benchmark for both delete implementations on several input sizes as large as 5000. The resulting graph lines up with the 
+expected asymptotic bound of each. LinkedList deletion is O(n), while SkipList deletion is O(logN). To make this more obvious, I plotted SkipList
+on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
+\includegraphics[width=0.7\linewidth]{../problem_3/delete_per_op_skip.png}\\
+
+OS: MacOS Sequoia 15.6.1\\
+CPU: Apple M1 Pro 8-core\\
+Memory: 16 GB\\
+**ChatGPT was used to generate example test cases for this problem\\
+\\
+
+\end{problem}
+
 \end{document}
