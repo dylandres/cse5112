@@ -13,10 +13,41 @@ class LinkedList:
         self.root = None
 
     def insert(self, x):
-        pass
+        node = Node(x, None)
+        # empty
+        if self.root is None:
+            self.root = node
+            return
+        # insert at beginning
+        if self.root.val > x:
+            node.next = self.root
+            self.root = node
+            return
+        ptr = self.root
+        while ptr.next is not None and ptr.next.val < x:
+            ptr = ptr.next
+        node.next = ptr.next
+        ptr.next = node
 
     def search(self, x):
-        pass
+        ptr = self.root
+        while ptr is not None:
+            if ptr.val == x:
+                return ptr
+            ptr = ptr.next
+        return None
 
     def delete(self, x):
-        pass
+        # empty
+        if self.root is None:
+            return
+        # head
+        if self.root.val == x:
+            self.root = self.root.next
+            return
+        ptr = self.root
+        while ptr.next is not None:
+            if ptr.next.val == x:
+                ptr.next = ptr.next.next
+                return
+            ptr = ptr.next
