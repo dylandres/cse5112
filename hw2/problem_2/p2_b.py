@@ -11,9 +11,7 @@ def closest_pair_brute_force(p_x, p_y):
     closest = float("inf")
     closest_points = None
     for i in range(len(p_x)):
-        for j in range(len(p_y)):
-            if i == j:
-                continue
+        for j in range(i + 1, len(p_x)):
             point1 = p_x[i]
             point2 = p_x[j]
             ed = d(point1, point2)
