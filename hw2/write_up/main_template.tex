@@ -145,6 +145,10 @@ linked list baseline. Include your implementation in
 expected asymptotic bound of each. LinkedList insertion is O(n), while SkipList insertion is O(logN). To make this more obvious, I plotted SkipList
 on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
 \includegraphics[width=0.7\linewidth]{../problem_3/insert_per_op_skip.png}\\
+\textbf{When timing the benchmark across N inputs, the graph also aligns with the expected asymptotic bounds.
+LinkedList insertion is $O(n^2)$ since it is $O(n)$ across N operations.
+SkipList insertion is $O(nlogN)$ since it is $O(logN)$ across N operations.}\\
+\includegraphics[width=0.7\linewidth]{../problem_3/p3_times.png}\\
 
 \newpage
 
@@ -158,6 +162,10 @@ implementation in \texttt{problem\_3/p3\_b.py}.\\\\
 expected asymptotic bound of each. LinkedList search is O(n), while SkipList search is O(logN). To make this more obvious, I plotted SkipList
 on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
 \includegraphics[width=0.7\linewidth]{../problem_3/search_per_op_skip.png}\\
+\textbf{When timing the benchmark across N inputs, the graph also aligns with the expected asymptotic bounds.
+LinkedList search is $O(n^2)$ since it is $O(n)$ across N operations.
+SkipList search is $O(nlogN)$ since it is $O(logN)$ across N operations.}\\
+\includegraphics[width=0.7\linewidth]{../problem_3/p3_search_times.png}\\
 \newpage
 
 (d) (\textit{5 points})
@@ -169,6 +177,10 @@ linked list baseline. Include your implementation in \texttt{problem\_3/p3\_b.py
 expected asymptotic bound of each. LinkedList deletion is O(n), while SkipList deletion is O(logN). To make this more obvious, I plotted SkipList
 on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
 \includegraphics[width=0.7\linewidth]{../problem_3/delete_per_op_skip.png}\\
+\textbf{When timing the benchmark across N inputs, the graph also aligns with the expected asymptotic bounds.
+LinkedList deletion is $O(n^2)$ since it is $O(n)$ across N operations.
+SkipList deletion is $O(nlogN)$ since it is $O(logN)$ across N operations.}\\
+\includegraphics[width=0.7\linewidth]{../problem_3/p3_delete_times.png}\\
 
 OS: MacOS Sequoia 15.6.1\\
 CPU: Apple M1 Pro 8-core\\
