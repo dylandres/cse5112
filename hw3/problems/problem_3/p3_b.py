@@ -23,4 +23,34 @@ def local_search_2opt(cost_matrix, init):
     Returns:
         tuple: locally optimal permutation under 2-opt.
     """
-    raise NotImplementedError("Implement me in problem_3/p3_b.py")
+    seq = list(init)
+
+    def cost(s):
+        return sum([cost_matrix[s[i] - 1][s[i + 1] - 1] for i in range(len(s) - 1)])
+
+    current_cost = cost(seq)
+
+    while True:
+        best_delta = 0
+        best_i = -1
+        best_j = -1
+        for i in range(len(seq) - 1):
+            for j in range(i + 1, len(seq)):
+                seq[i], seq[j] = seq[j], seq[i]
+                new_cost = cost(seq)
+                seq[i], seq[j] = seq[j], seq[i]
+                delta = new_cost - current_cost
+                if delta < best_delta:
+                    best_delta = delta
+                    best_i = i
+                    best_j = j
+
+        # best possible delta
+        if best_delta >= 0:
+            break
+
+        # apply best swap
+        seq[best_i], seq[best_j] = seq[best_j], seq[best_i]
+        current_cost += best_delta
+
+    return tuple(seq)
