@@ -1,0 +1,182 @@
+\documentclass{hw_template}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% STUDENTS: Please fill these out with your information
+\newcommand{\name}{Dylan Andres}
+\newcommand{\netid}{dra77}
+\newcommand{\collaborators}{}
+% / STUDENT
+
+\newcommand{\hwnum}{1}
+\newcommand{\duedate}{September 23, 11:59pm ET}
+\renewcommand{\title}{Stable Matching, Greedy, Divide and Conquer}
+\newcommand{\io}{\textbf{Code input and output format.} }
+\newcommand{\submission}{\textbf{Submission.}}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+
+% \newtheorem{claim}{Claim}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 1: G-S algorithm
+
+\begin{problem}
+In this problem, you will compute the maximum sum of non-adjacent elements,
+$\operatorname{maxsum}(x)
+= \max_{S \in \mathcal{S}} \; \sum_{s \in S} x_s$
+where no two elements in \(S\) are adjacent, in two settings: a list and a tree. The definition of
+“adjacent” will be specific to each setting. Additionally, for each setting you must first state
+the subproblem precisely and then implement the full dynamic programming algorithm.\\
+
+
+(a) (\textit{2 points})
+Given a sequence of integers $x = (x_1, x_2, \ldots, x_n)$,
+your goal is to compute the largest sum of non-adjacent elements of \(x\), denoted as
+\(\operatorname{maxsum\_list}(x)\).
+Adjacent elements of the sequence are next to each other: \(x_i\) and \(x_{i+1}\). \\\\
+Identify the dynamic programming subproblem and write its solution here.\\
+
+\textbf{The DP subproblem is: In order to maximize the sum of non-adjacent integers in a list, should we 
+take the current integer plus the total sum of the integer two places before it? Or should we
+skip the current integer and take the total sum of the integer one place before it?}\\
+
+\textbf{The solution involves creating a DP array of size n+1 (where n is the length of input list) so 
+that it can be 1-indexed. The base cases are dp[0] = 0 and dp[1] = x[0] (where dp is the DP array and x is the input list).
+This is because an empty list has a max sum of 0 and a list with one element has a max sum of that element.
+Then, for each index i from 2 to n, we compute dp[i] as the maximum of  dp[i-2] + x[i-1] 
+(taking the current integer plus the total sum of the integer two places before it), and dp[i-1] 
+(skipping current element and taking the total sum of the integer one place before it).
+Finally, we return dp[n] as the max sum.}\\\\
+
+(b) (\textit{2 points})
+Given a tree with nodes that contain integers, your goal is to compute the largest sum
+of non-adjacent elements. Trees are represented as a set of vertices
+$v_i \in V$ and edges $(v_i, v_j) \in E \subseteq V \times V$.
+There are no loops and every vertex has at most a single parent.
+Adjacent elements of the tree are those that have an edge between nodes, i.e. $(v_i, v_j) \in E$.
+For convenience, define the children of a node to be
+$c(v_i) = { v_j \mid (v_i, v_j) \in E }$\\\\
+Identify the dynamic programming subproblem and write its solution here.\\\\
+
+\textbf{The DP subproblem is: In order to maximum the sum of non-adjacent nodes in a tree, should we
+take the current node's value plus the total sum of its sub-trees (excluding its direct child nodes) or should we 
+skip the current node's value and take the maximum sum from all of its sub-trees}\\
+
+\textbf{The solution starts by evaluating two edge cases, a tree of size 0 has a maximum of 0, and a tree of size 1 has
+a maximum of the value of the single node. Next, we find the root of tree to start the heuristic. Since a node can 
+have mulitple children, the tree has to be traversed recursively starting with the root. At each step of the recursive sequence,
+we compute for each child:}\\
+\textbf{1. The sum of taking the current node's value plus the total sum of its sub-trees (excluding its direct child nodes)}\\
+\textbf{2. The sum of skipping the current node's value and taking the maximum sum from all of its sub-trees}\\
+\textbf{These sums are returned up the recursive call stack back to the root. Finally, we return the maximum of the two sums.}\\\\
+
+\end{problem}
+
+\newpage
+\begin{problem}
+Given $n$ points in a 2D plane, your goal is to find the two points that are closest
+together according to the Euclidean distance
+$d(x, y) = \sqrt{(x_i - y_i)^2 + (x_j - y_j)^2}$.
+
+
+(d) (\textit{5 points})
+Perform an empirical analysis of the three approaches, plotting their runtime
+performance for a series of problem sizes. \\\\
+
+\textbf{I ran a benchmark for each implementation on several input sizes as large as 5000, then 
+plotted the median runtime. The resulting graph is very consistent with the asymptotic bounds of each algorithm. 
+The brute-force algorithm (slowest) is clearly $O(n^2)$ as evident by the quadratic curve. The divide \& conquer looks 
+linear at first, but there is a clear "elbow" around n = 2000, which is consistent with the $O(n \log n)$ bound. Lastly,
+the randomized algorithm is the fastest and appears linear, which is consistent with its expected $O(n)$ time complexity. 
+This is not as obvious, so I also plotted the randomized algorithm own its own:}\\
+
+
+OS: MacOS Sequoia 15.6.1\\
+CPU: Apple M1 Pro 8-core\\
+Memory: 16 GB\\
+**ChatGPT was used to generate example test cases for this problem\\
+\\
+
+\end{problem}
+
+\newpage
+\begin{problem}
+\textbf{Skip lists} are randomized data structures that allow efficient (in expectation) 
+insertion, search, and deletion operations in a sorted list. We assume that list elements 
+are always integers.
+
+You will implement skip lists in this problem, as well as a linked list baseline. 
+We supply separate \texttt{Node} classes in each file \texttt{problem\_3/*}.py, 
+which will be the backbone of each implementation.
+
+Both implementations will have the following interface:
+\begin{itemize}
+    \item \textbf{insert(list, x: int)} $\rightarrow$ \texttt{None}: Add a new integer to our list.
+    \item \textbf{search(list, x: int)} $\rightarrow$ \texttt{Node}: Return the node in our list that has the value $x$.
+    \item \textbf{delete(list, x: int)} $\rightarrow$ \texttt{None}: Delete the node in our list that has value $x$.
+\end{itemize}
+
+For simplicity, we assume that no repeated elements will be inserted into the list.
+
+Please read the following resource on skip lists for more helpful information.
+
+
+(a) (\textit{5 points})
+As a baseline, implement a linked list class. Give the runtime complexity of 
+search, insertion, and deletion. The linked list must always be in sorted order, and all 
+elements will be integers. Include your implementation in 
+\texttt{problem\_3/p3\_a.py}.\\\\
+\textbf{Search: O(n). The worst case is when the element to search does not exist, or when the element is the largest of all existing elements. All n nodes must be traversed.}\\\\
+\textbf{Insertion: O(n). The worse case is when the element to insert is larger than all existing elements. All n nodes must be traversed.}\\\\
+\textbf{Deletion: O(n). The worst case is when the element to delete does not exist or when the element is the largest of all existing elements. All n nodes must be traversed.}\\\\
+\newpage
+
+(b) (\textit{5 points})
+Implement insertion for skip lists, which should take O(log n) expected time. All
+list elements will be ints. Perform an empirical analysis of insertion in skip lists versus the
+linked list baseline. Include your implementation in 
+\texttt{problem\_3/p3\_a.py}.\\\\
+\textbf{I ran a benchmark for both insert implementations on several input sizes as large as 5000. The resulting graph lines up with the 
+expected asymptotic bound of each. LinkedList insertion is O(n), while SkipList insertion is O(logN). To make this more obvious, I plotted SkipList
+on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
+\textbf{When timing the benchmark across N inputs, the graph also aligns with the expected asymptotic bounds.
+LinkedList insertion is $O(n^2)$ since it is $O(n)$ across N operations.
+SkipList insertion is $O(nlogN)$ since it is $O(logN)$ across N operations.}\\
+
+\newpage
+
+(c) (\textit{5 points})
+Implement search for skip lists, which should take $O(\log n)$ expected time. Give
+the expected and worst-case runtime complexity. All list elements will be integers. Perform
+an \emph{empirical analysis} of search in skip lists versus the linked list baseline. Include your
+implementation in \texttt{problem\_3/p3\_b.py}.\\\\
+\textbf{I ran a benchmark for both search implementations on several input sizes as large as 5000. The resulting graph lines up with the 
+expected asymptotic bound of each. LinkedList search is O(n), while SkipList search is O(logN). To make this more obvious, I plotted SkipList
+on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
+\textbf{When timing the benchmark across N inputs, the graph also aligns with the expected asymptotic bounds.
+LinkedList search is $O(n^2)$ since it is $O(n)$ across N operations.
+SkipList search is $O(nlogN)$ since it is $O(logN)$ across N operations.}\\
+\newpage
+
+(d) (\textit{5 points})
+Implement deletion for skip lists, which should take $O(\log n)$ expected time. All
+list elements will be integers. Perform an \emph{empirical analysis} of deletion in skip lists versus the
+linked list baseline. Include your implementation in \texttt{problem\_3/p3\_b.py}.\\\\
+\textbf{I ran a benchmark for both delete implementations on several input sizes as large as 5000. The resulting graph lines up with the 
+expected asymptotic bound of each. LinkedList deletion is O(n), while SkipList deletion is O(logN). To make this more obvious, I plotted SkipList
+on its own. The resulting graph has some noise since the algorithm is randomized. However, the general shape aligns with a logarithmic plot.}\\
+\textbf{When timing the benchmark across N inputs, the graph also aligns with the expected asymptotic bounds.
+LinkedList deletion is $O(n^2)$ since it is $O(n)$ across N operations.
+SkipList deletion is $O(nlogN)$ since it is $O(logN)$ across N operations.}\\
+
+OS: MacOS Sequoia 15.6.1\\
+CPU: Apple M1 Pro 8-core\\
+Memory: 16 GB\\
+**ChatGPT was used to generate example test cases for this problem\\
+\\
+
+\end{problem}
+
+\end{document}
