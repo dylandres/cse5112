@@ -1,9 +1,53 @@
 # Problem 1e
 
-import networkx as nx
 from collections import defaultdict, deque
 
-def plan_city_e(num_data_hubs,num_service_providers, connections, provider_capacities, preliminary_assignment):
+class Graph:
+    def __init__(self):
+        self._nodes = set()
+        self._adj = {}
+
+    def add_node(self, n):
+        if n not in self._nodes:
+            self._nodes.add(n)
+            self._adj.setdefault(n, {})
+
+    def add_nodes_from(self, nodes):
+        for n in nodes:
+            self.add_node(n)
+
+    def add_edge(self, u, v, **attrs):
+        self.add_node(u)
+        self.add_node(v)
+        self._adj[u][v] = dict(attrs)
+
+    def nodes(self):
+        return list(self._nodes)
+
+    def edges(self, data=False):
+        for u in self._adj:
+            for v, attrs in self._adj[u].items():
+                if data:
+                    yield (u, v, attrs)
+                else:
+                    yield (u, v)
+
+    def has_edge(self, u, v):
+        return u in self._adj and v in self._adj[u]
+
+    def remove_edge(self, u, v):
+        if u in self._adj and v in self._adj[u]:
+            del self._adj[u][v]
+
+    def __getitem__(self, u):
+        return self._adj[u]
+
+
+def plan_city_e(num_data_hubs,
+                num_service_providers,
+                connections,
+                provider_capacities,
+                preliminary_assignment):
     graph, residual, source, sink, flow = _build_graph_and_residual(
         num_data_hubs,
         num_service_providers,
@@ -39,7 +83,7 @@ def plan_city_e(num_data_hubs,num_service_providers, connections, provider_capac
         return assignments
 
     # not feasible
-    assignments = [0] * num_data_hubs  # per spec
+    assignments = [0] * num_data_hubs
     reachable = set([source])
     q = deque([source])
     while q:
@@ -62,13 +106,12 @@ def plan_city_e(num_data_hubs,num_service_providers, connections, provider_capac
     return assignments + provider_increments
 
 
-
 def _build_graph_and_residual(num_data_hubs,
                               num_service_providers,
                               connections,
                               provider_capacities,
                               preliminary_assignment):
-    graph = nx.DiGraph()
+    graph = Graph()
 
     # nodes
     source = "source"
@@ -107,11 +150,11 @@ def _build_graph_and_residual(num_data_hubs,
         flow[(hub, prov)] += 1
         flow[(prov, sink)] += 1
 
-    residual = nx.DiGraph()
+    residual = Graph()
     residual.add_nodes_from(graph.nodes())
 
     for u, v, data in graph.edges(data=True):
-        cap = data.get("capacity", 1)  # default capacity = 1
+        cap = data.get("capacity", 1)
         f = flow[(u, v)]
 
         # forward capacity
@@ -162,7 +205,7 @@ def _augment_flow(graph, residual, flow, parent, source, sink):
         if residual[u][v]["capacity"] == 0:
             residual.remove_edge(u, v)
 
-        # update  backward edge
+        # update backward edge
         if residual.has_edge(v, u):
             residual[v][u]["capacity"] += bottleneck
         else:
@@ -174,4 +217,5 @@ def _augment_flow(graph, residual, flow, parent, source, sink):
         else:
             # path uses a backward residual edge, reduce flow
             flow[(v, u)] -= bottleneck
+
         v = u

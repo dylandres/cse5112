@@ -1,9 +1,53 @@
 # Problem 1d
 
-import networkx as nx
 from collections import defaultdict, deque
 
-def plan_city_d(num_data_hubs, num_service_providers, connections, provider_capacities, preliminary_assignment):
+class Graph:
+    def __init__(self):
+        self._nodes = set()
+        self._adj = {}
+
+    def add_node(self, n):
+        if n not in self._nodes:
+            self._nodes.add(n)
+            self._adj.setdefault(n, {})
+
+    def add_nodes_from(self, nodes):
+        for n in nodes:
+            self.add_node(n)
+
+    def add_edge(self, u, v, **attrs):
+        self.add_node(u)
+        self.add_node(v)
+        self._adj[u][v] = dict(attrs)
+
+    def nodes(self):
+        return list(self._nodes)
+
+    def edges(self, data=False):
+        for u in self._adj:
+            for v, attrs in self._adj[u].items():
+                if data:
+                    yield (u, v, attrs)
+                else:
+                    yield (u, v)
+
+    def has_edge(self, u, v):
+        return u in self._adj and v in self._adj[u]
+
+    def remove_edge(self, u, v):
+        if u in self._adj and v in self._adj[u]:
+            del self._adj[u][v]
+
+    def __getitem__(self, u):
+        return self._adj[u]
+
+
+def plan_city_d(num_data_hubs,
+                num_service_providers,
+                connections,
+                provider_capacities,
+                preliminary_assignment):
     graph, residual, source, sink, flow = _build_graph_and_residual(
         num_data_hubs,
         num_service_providers,
@@ -26,12 +70,13 @@ def plan_city_d(num_data_hubs, num_service_providers, connections, provider_capa
 
     return assigned_hubs == num_data_hubs
 
+
 def _build_graph_and_residual(num_data_hubs,
-                              num_service_providers,
+                              num_data_providers,
                               connections,
                               provider_capacities,
                               preliminary_assignment):
-    graph = nx.DiGraph()
+    graph = Graph()
 
     # nodes
     source = "source"
@@ -44,7 +89,7 @@ def _build_graph_and_residual(num_data_hubs,
 
     # providers
     offset = num_data_hubs
-    for j in range(num_service_providers):
+    for j in range(num_data_providers):
         p = offset + j
         graph.add_node(p)
 
@@ -59,22 +104,24 @@ def _build_graph_and_residual(num_data_hubs,
 
     # provider -> sink edges
     graph.add_node(sink)
-    for j in range(num_service_providers):
+    for j in range(num_data_providers):
         p = offset + j
         cap = provider_capacities[p]
         graph.add_edge(p, sink, capacity=cap)
 
+    # initial flow from preliminary_assignment
     flow = defaultdict(int)
     for hub, prov in preliminary_assignment.items():
         flow[(source, hub)] += 1
         flow[(hub, prov)] += 1
         flow[(prov, sink)] += 1
 
-    residual = nx.DiGraph()
+    # build residual graph
+    residual = Graph()
     residual.add_nodes_from(graph.nodes())
 
     for u, v, data in graph.edges(data=True):
-        cap = data.get("capacity", 1)  # default capacity = 1
+        cap = data.get("capacity", 1)
         f = flow[(u, v)]
 
         # forward capacity
@@ -92,6 +139,7 @@ def _build_graph_and_residual(num_data_hubs,
 def _bfs(residual, source, sink):
     parent = {source: None}
     q = deque([source])
+
     while q:
         u = q.popleft()
         for v, data in residual[u].items():
@@ -106,7 +154,7 @@ def _bfs(residual, source, sink):
 
 
 def _augment_flow(graph, residual, flow, parent, source, sink):
-    # find bottleneck capacity
+    # find bottleneck capacity along the s-t path
     bottleneck = float("inf")
     v = sink
     while v != source:
@@ -115,26 +163,27 @@ def _augment_flow(graph, residual, flow, parent, source, sink):
         bottleneck = min(bottleneck, cap)
         v = u
 
-    # update residual and flow
+    # update residual and flow along the path
     v = sink
     while v != source:
         u = parent[v]
 
-        # update forward edge
+        # update forward edge residual capacity
         residual[u][v]["capacity"] -= bottleneck
         if residual[u][v]["capacity"] == 0:
             residual.remove_edge(u, v)
 
-        # update  backward edge
+        # update backward edge residual capacity
         if residual.has_edge(v, u):
             residual[v][u]["capacity"] += bottleneck
         else:
             residual.add_edge(v, u, capacity=bottleneck)
 
-        # update flow
+        # update flow in the original graph orientation
         if graph.has_edge(u, v):
             flow[(u, v)] += bottleneck
         else:
-            # path uses a backward residual edge, reduce flow
+            # we traversed a backward residual edge, so reduce flow
             flow[(v, u)] -= bottleneck
+
         v = u
