@@ -8,9 +8,9 @@
 \newcommand{\collaborators}{}
 % / STUDENT
 
-\newcommand{\hwnum}{1}
-\newcommand{\duedate}{September 23, 11:59pm ET}
-\renewcommand{\title}{Stable Matching, Greedy, Divide and Conquer}
+\newcommand{\hwnum}{4}
+\newcommand{\duedate}{December 10, 11:59pm ET}
+\renewcommand{\title}{NP Hard, Approximation algorithms}
 \newcommand{\io}{\textbf{Code input and output format.} }
 \newcommand{\submission}{\textbf{Submission.}}
 \newcommand{\floor}[1]{\lfloor #1 \rfloor}
@@ -23,9 +23,22 @@
 % Problem 1: G-S algorithm
 
 \begin{problem}
-
-
-
+\includegraphics[width=0.7\linewidth]{images/p1a.png}
+(Problem 1.a.)\\
+This graph shows the initial graph. The source node $s$ has a single edge to each data hub $hub_i$.
+Each data hub has edges to providers $prov_i$, as specified in the input $connections$ dictionary.
+\\\\
+\includegraphics[width=0.7\linewidth]{images/p1b.png}\\
+(Problem 1.b.)\\
+This graph includes the sink node $t$, where each provider $prov_i$ has an edge to $t$ with capacity $c$, as 
+specified in the input $provider\_capacities$ list.
+\\\\
+\includegraphics[width=0.7\linewidth]{images/p1c.png}\\
+(Problem 1.c.)\\
+This graph is the computed residual graph. This was done by first applying the initial source-to-sink flow
+as specified in the input $preliminary\_assignment$
+dictionary. Next, the forward residual capacities were computed for each edge (capacity minus flow), and a backwards edge (capacity equals flow) was added 
+whenever there was a non-zero flow on an edge. Edges with zero residual capacity were removed from the graph.
 \end{problem}
 
 \setcounter{problem}{2}
