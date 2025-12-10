@@ -1,0 +1,45 @@
+\documentclass{hw_template}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% STUDENTS: Please fill these out with your information
+\newcommand{\name}{Dylan Andres}
+\newcommand{\netid}{dra77}
+\newcommand{\collaborators}{}
+% / STUDENT
+
+\newcommand{\hwnum}{1}
+\newcommand{\duedate}{September 23, 11:59pm ET}
+\renewcommand{\title}{Stable Matching, Greedy, Divide and Conquer}
+\newcommand{\io}{\textbf{Code input and output format.} }
+\newcommand{\submission}{\textbf{Submission.}}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+
+% \newtheorem{claim}{Claim}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 1: G-S algorithm
+
+\begin{problem}
+
+
+
+\end{problem}
+
+\setcounter{problem}{2}
+\begin{problem}
+The hash function $h_i(x) = (x + a_i) \bmod w$ is not good. For a given $w$, any group of elements
+that differ by a multiple of $w$ will hash to the index in every row and collide. For example, if 
+$w = 10$, then the elements $3, 13, 23, \ldots$ will collide in every row.
+
+For a given row $i$\\
+$h_i(3) = (3 + a_i) \bmod 10$\\
+$= h_i(13) = (13 + a_i) \bmod 10$\\
+$= h_i(23) = (23 + a_i) \bmod 10$\\
+Each of these elements will hash to the same index in row $i$.
+
+\end{problem}
+
+\end{document}
